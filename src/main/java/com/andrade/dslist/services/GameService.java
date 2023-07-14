@@ -3,6 +3,7 @@ package com.andrade.dslist.services;
 import com.andrade.dslist.dto.GameDTO;
 import com.andrade.dslist.dto.GameMinDTO;
 import com.andrade.dslist.entities.Game;
+import com.andrade.dslist.projections.GameMInProjection;
 import com.andrade.dslist.repositories.GameRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,11 @@ public class GameService {
     public GameDTO findById(Long id){
         Game result = gameRepository.findById(id).get();
         return new GameDTO(result);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId){
+        List<GameMInProjection> result = gameRepository.searchByList(listId);
+        return result.stream().map(GameMinDTO::new).toList();
     }
 }
